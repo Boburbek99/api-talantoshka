@@ -25,7 +25,7 @@ initializeRoutes(app);
   app.use(bodyParser.json());
   const server = http.createServer(app);
 
-  const appPort = process.env.APP_PORT;
+  const appPort = process.env.PORT;
   server.listen(appPort, () => {
     console.log(`Example app listening on port ${appPort}`);
   });
