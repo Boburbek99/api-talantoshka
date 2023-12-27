@@ -21,4 +21,23 @@ router.post("/author", async (req, res) => {
       res.status(500).send("Server error" + error);
     }
   });
+  router.put("/author/:id", async (req, res) => {
+    try {
+      const id= req.params.id
+      const updateAuthor = await authorQueries. updateAuthor(id,req.body);
+      res.send(updateAuthor);
+    } catch (error) {
+      res.status(500).send("Server error" + error);
+    }
+  });
+
+  router.delete("/author/:id", async (req, res) => {
+    try {
+       
+      const removeAuthor = await authorQueries.removeAuthor(req.params.id);
+      res.send(removeAuthor);
+    } catch (error) {
+      res.status(500).send("Server error" + error);
+    }
+  });
 export default router;

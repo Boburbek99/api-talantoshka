@@ -5,14 +5,15 @@ const authorSchema=new mongoose.Schema({
   surname:String,
   age:String,
   year:String,
+  email:String
   }) 
 const author=mongoose.model("author",authorSchema)
 
 const authorQueries = {
   getAuthors,
   addAuthor,
-//   removeAuthor,    
-//   updateAuthor,
+  removeAuthor,    
+  updateAuthor,
 //   getAuthorsId,
 };
 async  function getAuthors() {
@@ -24,5 +25,12 @@ async  function getAuthors() {
     const authors = new author(authorData)
     return await authors.save();
   }
-  
+  async function removeAuthor(id){
+    const index = await author.deleteOne({_id:id})
+    return index;
+  }
+  async function updateAuthor(id, props) {
+    const updatauthor= await author.findByIdAndUpdate({_id:id}, props, { new: true });
+    return await updatauthor.save();
+  }
   export {authorQueries,author}
