@@ -1,6 +1,7 @@
 import author from "../api/author.js";
-import  user  from "../api/user.js";
-import  collection  from "../api/collection.js";
+import user from "../api/user.js";
+import collection from "../api/collection.js";
+import tag from "../api/tag.js";
 
 export function initializeRoutes(app) {
   app.use((req, res, next) => {
@@ -10,4 +11,5 @@ export function initializeRoutes(app) {
   app.use(author);
   app.use(user);
   app.use(collection);
+  app.use(tag);
 }

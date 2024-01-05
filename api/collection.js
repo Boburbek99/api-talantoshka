@@ -42,4 +42,5 @@ router.delete("/collection/:id", requireAuth, async (req, res) => {
   }
 })
 
+
 export default router;
