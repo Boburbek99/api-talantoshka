@@ -15,8 +15,8 @@ router.get("/collection", requireAuth, async (req, res) => {
 router.post("/collection", requireAuth, async (req, res) => {
   try {
     const newCollection = await collectionQueries.addCollection(req.body);
+    res.status(200).send(newCollection)
 
-    res.send(newCollection);
   } catch (error) {
     console.log(error, 'error')
     res.status(500).send("Server error", error);

@@ -5,7 +5,10 @@ const collectionSchema = new mongoose.Schema({
   description: String,
   newPrice: String,
   oldPrice: String,
-  tags: String,
+  tag: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "tag",
+  }],
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "author",
@@ -42,7 +45,7 @@ async function removeCollection(id) {
 }
 
 async function getCollection(id) {
-  const authorCollection = await collection.find({ author: id }).populate("name")
+  const authorCollection = await collection.find({ author: id }, { tag: id }).populate("name")
   return authorCollection;
 }
 
