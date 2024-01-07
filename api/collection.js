@@ -26,6 +26,7 @@ router.put("/collection/:id", requireAuth, async (req, res) => {
   try {
     const id = req.params.id
     const newCollection = await collectionQueries.updateCollection(id, req.body);
+    console.log(newCollection, "newCollection")
     res.send(newCollection);
   } catch (error) {
     console.log(error, 'error')
