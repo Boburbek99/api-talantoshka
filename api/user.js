@@ -10,7 +10,9 @@ import {
   jwtOptions,
   authRole,
 } from "../services/passport-config.js";
+
 import { userQueries } from "../model/user.js";
+import { configDotenv } from "dotenv";
 
 router.post("/register", async (req, res) => {
   try {
@@ -27,10 +29,24 @@ router.post("/register", async (req, res) => {
   }
 });
 
+router.put("/password/:id", async (req, res) => {
+  try {
+    let passwordHash = await hashPassword(req.body.password);
+    let userIdToUpdate = req.params.id
+    const update = await userQueries.updatePassword(userIdToUpdate, passwordHash)
+    res.status(200).send(update);
+  } catch (error) {
+
+    console.log(error, 'error')
+
+    res.status(500).send("server error" + error)
+  }
+})
+
 router.post("/login", async (req, res) => {
   try {
     const { login, password } = req.body;
-    const findUser = await userQueries.getUserByLogin(login);
+    const findUser = await userQueries.UserByLogin(login);
 
     if (!findUser) {
       return res.status(401).json({ message: "Пользователь не найден" });
@@ -54,24 +70,20 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get(
-  "/admin",
-  requireAuth,
-  authRole(["admin", "author"]),
-  async (req, res) => {
-    try {
-      let currentUser = await userQueries.getUserById(req.user._id);
-      const userRole = currentUser.role;
+router.get("/admin", requireAuth, authRole(["admin", "author", "client"]), async (req, res) => {
+  try {
+    let currentUser = await userQueries.getUserById(req.user._id);
+    const userRole = currentUser.role;
 
-      if (userRole === "admin" || userRole === "author") {
-        res.send("Secret Pentagon data accessible only to the admin!!");
-      } else {
-        res.status(403).send("You do not have permission to access!!");
-      }
-    } catch (error) {
-      res.status(500).send("Server error" + error);
+    if (userRole === "admin" || userRole === "author" || userRole === "client") {
+      res.send(currentUser);
+    } else {
+      res.status(403).send("You do not have permission to access!!");
     }
+  } catch (error) {
+    res.status(500).send("Server error" + error);
   }
+}
 );
 
 export default router;

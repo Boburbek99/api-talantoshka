@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const userSchema = new mongoose.Schema({
   login: String,
   passwordHash: String,
@@ -7,16 +8,22 @@ const userSchema = new mongoose.Schema({
 const user = mongoose.model("user", userSchema);
 
 const userQueries = {
-  getUserByLogin,
+  UserByLogin,
   getUserById,
   addUser,
+  updatePassword
 };
+
+async function updatePassword(id, newPassword) {
+  const update = await user.findByIdAndUpdate({ _id: id }, { passwordHash: newPassword });
+  return await update.save()
+}
 
 async function getUserById(id) {
   return await user.findById(id);
 }
 
-async function getUserByLogin(login) {
+async function UserByLogin(login) {
   const foundUser = await user.findOne({ login });
   return foundUser;
 }
