@@ -14,8 +14,8 @@ const userQueries = {
   updatePassword
 };
 
-async function updatePassword(id, newPassword) {
-  const update = await user.findByIdAndUpdate({ _id: id }, { passwordHash: newPassword });
+async function updatePassword(id, newPassword, newLogin) {
+  const update = await user.findByIdAndUpdate({ _id: id }, { passwordHash: newPassword, login: newLogin }, { new: true });
   return await update.save()
 }
 
